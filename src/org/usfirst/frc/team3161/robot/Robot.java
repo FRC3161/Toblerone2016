@@ -11,16 +11,18 @@ import ca.team3161.lib.utils.controls.Gamepad;
 import ca.team3161.lib.utils.controls.JoystickMode;
 import ca.team3161.lib.utils.controls.LogitechDualAction;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TitanBot {
 
 	private SpeedController leftDrive, rightDrive,
 			intakePivot, intakeRoller, passivePivot;
-	private Encoder leftEncoder, rightEncoder;
-	private AnalogPotentiometer intakePot, passivePot;
+	private Encoder leftEncoder, rightEncoder, intakeEnc, passiveEnc;
+	private DigitalInput portcullisSwitch, intakeSwitch;
 	private TankDrivetrain drivetrain;
 	private Gamepad driverPad, operatorPad;
 //	private Intake intake;
@@ -28,12 +30,13 @@ public class Robot extends TitanBot {
 	
 	@Override
 	public void robotSetup() {
+		
 		driverPad = new LogitechDualAction(0);
 		operatorPad = new LogitechDualAction(1);
 		
 		for (LogitechDualAction.LogitechControl control : LogitechDualAction.LogitechControl.values()) {
 			for (LogitechDualAction.LogitechAxis axis : LogitechDualAction.LogitechAxis.values()) {
-				JoystickMode deadband = new DeadbandJoysticjkMode(0.05);
+				JoystickMode deadband = new DeadbandJoystickMode(0.05);
 				driverPad.setMode(control,  axis, deadband);
 				operatorPad.setMode(control,  axis, deadband);
 			}
@@ -57,12 +60,12 @@ public class Robot extends TitanBot {
 		
 		intakePivot = new Talon(4);
 		intakeRoller = new Talon(5);
-		intakePot = new AnalogPotentiometer(0);
-//		intake = new Intake(intakePivot, intakeRoller, intakePot);
+		intakeEnc = new Encoder(4, 5, false);
+//		intake = new Intake(intakePivot, intakeRoller, intakePot, intakeSwitch);
 		
 		passivePivot = new Talon(6);
-		passivePot = new AnalogPotentiometer(1);
-//		portOpener = new PortcullisOpener(passivePivot, passivePot);
+		passiveEnc = new Encoder(6, 7, false);
+//		portOpener = new PortcullisOpener(passivePivot, passivePot, portcullisSwitch);
 		
 //		gamepad.bind(LogitechDualAction.LogitechButton.LEFT_BUMPER, intake::rollIn);
 //		gamepad.bind(LogitechDualAction.LogitechButton.LEFT_BUMPER, PressType.RELEASE, intake::stopRoller);
@@ -113,6 +116,14 @@ public class Robot extends TitanBot {
 	@Override
 	public void disabledSetup() {
 		driverPad.disableBindings();
+	}
+	
+	@Override
+	public void disabledPeriodic() {
+		SmartDashboard.putNumber("Intake Encoder", intakeEnc.getRaw());
+		SmartDashboard.putNumber("Portculis Encoder", passiveEnc.getRaw());
+		SmartDashboard.putBoolean("Portcullis Limit Switch", portcullisSwitch.get());
+		SmartDashboard.putBoolean("Intake Limit Switch", intakeSwitch.get());
 	}
 
 	@Override

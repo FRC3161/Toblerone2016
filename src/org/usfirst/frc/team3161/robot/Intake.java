@@ -2,14 +2,16 @@ package org.usfirst.frc.team3161.robot;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.naming.LimitExceededException;
+
 import ca.team3161.lib.robot.pid.PIDAngleValueSrc;
-import ca.team3161.lib.robot.pid.PIDSrc;
 import ca.team3161.lib.robot.pid.PIDulum;
 import ca.team3161.lib.robot.pid.PotentiometerVoltagePIDSrc;
 import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 
 public class Intake extends RepeatingPooledSubsystem {
 	
@@ -18,18 +20,20 @@ public class Intake extends RepeatingPooledSubsystem {
 
 	private SpeedController intakePivot;
 	private SpeedController intakeRoller;
-	private AnalogPotentiometer intakePot;
+	private Encoder enc;
+	private DigitalInput limitSwitch;
 	
 	private PIDulum<PIDAngleValueSrc<PotentiometerVoltagePIDSrc>> pidulum;
 	private double pidulumTargetAngle;
 	private double rollerTarget;
 
 	public Intake(SpeedController intakePivot, SpeedController intakeRoller,
-			AnalogPotentiometer intakePot) {
+			Encoder enc, DigitalInput limitSwitch) {
 		super(20, TimeUnit.MILLISECONDS);
 		this.intakePivot = intakePivot;
 		this.intakeRoller = intakeRoller;
-		this.intakePot = intakePot;
+		this.enc = enc;
+		this.limitSwitch = limitSwitch;
 //		PIDSrc<Potentiometer, Float> source = new PotentiometerVoltagePIDSrc(intakePot, minVolt, maxVolt, minAngle, maxAngle);
 //		pidulum = new PIDulum<>(source, deadband, deadbandPeriod, deadbandUnit, kP, kI, kD, offsetAngle, torqueConstant);
 	}
@@ -38,7 +42,7 @@ public class Intake extends RepeatingPooledSubsystem {
 	public void defineResources() {
 		require(intakePivot);
 		require(intakeRoller);
-		require(intakePot);
+		require(enc);
 	}
 	
 	public void rollIn() {
