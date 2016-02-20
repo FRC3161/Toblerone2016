@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="var" path="networktables" sourcepath="networktables.sources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="lib/Yggdrasil-v0.15.0-RELEASE.jar" sourcepath="lib/Yggdrasil-v0.15.0-RELEASE-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/Toblerone/lib/Yggdrasil-v0.15.0-RELEASE-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Yggdrasil/lib/WPILib.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Team 3161/wpilib/java/current/NetworkTables.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Team 3161/wpilib/java/current/WPILib.jar"/>
+	<classpathentry kind="lib" path="lib/Yggdrasil-20160219-1742.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

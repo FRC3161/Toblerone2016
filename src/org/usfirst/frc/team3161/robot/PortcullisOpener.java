@@ -25,8 +25,8 @@ public class PortcullisOpener extends RepeatingPooledSubsystem {
 		super(20, TimeUnit.MILLISECONDS);
 		this.pivot = passivePivot;
 		this.pot = passivePot;
-		PIDSrc<Potentiometer, Float> source = new PotentiometerVoltagePIDSrc(passivePot, minVolt, maxVolt, minAngle, maxAngle);
-		pidulum = new PIDulum<>(source, deadband, deadbandPeriod, deadbandUnit, kP, kI, kD, offsetAngle, torqueConstant);
+//		PIDSrc<Potentiometer, Float> source = new PotentiometerVoltagePIDSrc(passivePot, minVolt, maxVolt, minAngle, maxAngle);
+//		pidulum = new PIDulum<>(source, deadband, deadbandPeriod, deadbandUnit, kP, kI, kD, offsetAngle, torqueConstant);
 	}
 	
 	public void raise() {

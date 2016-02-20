@@ -30,8 +30,8 @@ public class Intake extends RepeatingPooledSubsystem {
 		this.intakePivot = intakePivot;
 		this.intakeRoller = intakeRoller;
 		this.intakePot = intakePot;
-		PIDSrc<Potentiometer, Float> source = new PotentiometerVoltagePIDSrc(intakePot, minVolt, maxVolt, minAngle, maxAngle);
-		pidulum = new PIDulum<>(source, deadband, deadbandPeriod, deadbandUnit, kP, kI, kD, offsetAngle, torqueConstant);
+//		PIDSrc<Potentiometer, Float> source = new PotentiometerVoltagePIDSrc(intakePot, minVolt, maxVolt, minAngle, maxAngle);
+//		pidulum = new PIDulum<>(source, deadband, deadbandPeriod, deadbandUnit, kP, kI, kD, offsetAngle, torqueConstant);
 	}
 
 	@Override
