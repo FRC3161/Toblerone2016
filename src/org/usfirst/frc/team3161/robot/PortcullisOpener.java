@@ -20,21 +20,28 @@ public class PortcullisOpener extends RepeatingPooledSubsystem {
 	private AnalogPotentiometer pot;
 	private PIDulum<PIDAngleValueSrc<PotentiometerVoltagePIDSrc>> pidulum;
 	private double pidulumTargetAngle;
+	private double pivotTarget;
 
-	public PortcullisOpener(SpeedController passivePivot, AnalogPotentiometer passivePot) {
+	public PortcullisOpener(SpeedController passivePivot) {
 		super(20, TimeUnit.MILLISECONDS);
 		this.pivot = passivePivot;
-		this.pot = passivePot;
+		//this.pot = passivePot;
 //		PIDSrc<Potentiometer, Float> source = new PotentiometerVoltagePIDSrc(passivePot, minVolt, maxVolt, minAngle, maxAngle);
 //		pidulum = new PIDulum<>(source, deadband, deadbandPeriod, deadbandUnit, kP, kI, kD, offsetAngle, torqueConstant);
 	}
 	
 	public void raise() {
-		setPivotAngle(RAISED_ANGLE);
+		//setPivotAngle(RAISED_ANGLE);
+		this.pivotTarget = 1;
 	}
 	
 	public void lower() {
-		setPivotAngle(LOWERED_ANGLE);
+		//setPivotAngle(LOWERED_ANGLE);
+		this.pivotTarget = -1;
+	}
+	
+	public void stop() {
+		this.pivotTarget = 0;
 	}
 	
 	private void setPivotAngle(double angle) {
@@ -44,12 +51,13 @@ public class PortcullisOpener extends RepeatingPooledSubsystem {
 	@Override
 	public void defineResources() {
 		require(pivot);
-		require(pot);
+		//require(pot);
 	}
 
 	@Override
 	public void task() throws Exception {
 //		pidulum.pid((float) pidulumTargetAngle);
+		pivot.set(pivotTarget);
 	}
 
 }

@@ -8,6 +8,7 @@ import ca.team3161.lib.robot.pid.PIDulum;
 import ca.team3161.lib.robot.pid.PotentiometerVoltagePIDSrc;
 import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 
@@ -18,18 +19,19 @@ public class Intake extends RepeatingPooledSubsystem {
 
 	private SpeedController intakePivot;
 	private SpeedController intakeRoller;
-	private AnalogPotentiometer intakePot;
+	private DigitalInput intakeSwitch;
 	
 	private PIDulum<PIDAngleValueSrc<PotentiometerVoltagePIDSrc>> pidulum;
 	private double pidulumTargetAngle;
 	private double rollerTarget;
-
+	private double pivotTarget;
+	
 	public Intake(SpeedController intakePivot, SpeedController intakeRoller,
-			AnalogPotentiometer intakePot) {
+			DigitalInput intakeSwitch) {
 		super(20, TimeUnit.MILLISECONDS);
 		this.intakePivot = intakePivot;
 		this.intakeRoller = intakeRoller;
-		this.intakePot = intakePot;
+		this.intakeSwitch = intakeSwitch;
 //		PIDSrc<Potentiometer, Float> source = new PotentiometerVoltagePIDSrc(intakePot, minVolt, maxVolt, minAngle, maxAngle);
 //		pidulum = new PIDulum<>(source, deadband, deadbandPeriod, deadbandUnit, kP, kI, kD, offsetAngle, torqueConstant);
 	}
@@ -38,15 +40,11 @@ public class Intake extends RepeatingPooledSubsystem {
 	public void defineResources() {
 		require(intakePivot);
 		require(intakeRoller);
-		require(intakePot);
+		require(intakeSwitch);
 	}
 	
 	public void rollIn() {
 		setRoller(1);
-	}
-				
-	public int ret() {
-		return 5;
 	}
 		
 	public void rollOut() {
@@ -62,21 +60,34 @@ public class Intake extends RepeatingPooledSubsystem {
 	}
 	
 	public void raise() {
-		setPivotAngle(RAISED_ANGLE);
+		//setPivotAngle(RAISED_ANGLE);
+		this.pivotTarget = 1;
 	}
 	
 	public void lower() {
-		setPivotAngle(LOWERED_ANGLE);
+		//setPivotAngle(LOWERED_ANGLE);
+		this.pivotTarget = -1;
+	}
+	
+	public void stop() {
+		this.pivotTarget = 0;
 	}
 
-	private void setPivotAngle(double angle) {
+	/*private void setPivotAngle(double angle) {
 		this.pidulumTargetAngle = angle;
-	}
+	}*/
 	
 	@Override
 	public void task() throws Exception {
 //		pidulum.pid((float) pidulumTargetAngle);
 //		intakeRoller.set(rollerTarget);
+		
+		if(intakeSwitch.get() && pivotTarget > 0){
+			intakePivot.set(0);
+		}
+		else{
+			intakePivot.set(pivotTarget);
+		}
 	}
 
 }
