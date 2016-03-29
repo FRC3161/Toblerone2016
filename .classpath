@@ -2,8 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="C:/Users/Team 3161/wpilib/java/current/NetworkTables.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Team 3161/wpilib/java/current/WPILib.jar"/>
-	<classpathentry kind="lib" path="lib/Yggdrasil-20160219-1742.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Team 3161/Toblerone2016/lib/NetworkTables.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Team 3161/Toblerone2016/lib/WPILib.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Team 3161/Toblerone2016/lib/Yggdrasil-20160223-1621.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

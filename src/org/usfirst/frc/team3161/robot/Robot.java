@@ -1,4 +1,3 @@
-
 package org.usfirst.frc.team3161.robot;
 
 import ca.team3161.lib.robot.TitanBot;
@@ -17,6 +16,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TitanBot {
 
@@ -119,6 +119,14 @@ public class Robot extends TitanBot {
 	@Override
 	public void disabledSetup() {
 		driverPad.disableBindings();
+	}
+	
+	@Override
+	public void disabledPeriodic() {
+//		SmartDashboard.putNumber("Intake Encoder", intakeEnc.getRaw());
+//		SmartDashboard.putNumber("Portculis Encoder", passiveEnc.getRaw());
+//		SmartDashboard.putBoolean("Portcullis Limit Switch", portcullisSwitch.get());
+		SmartDashboard.putBoolean("Intake Limit Switch", intakeSwitch.get());
 	}
 
 	@Override
