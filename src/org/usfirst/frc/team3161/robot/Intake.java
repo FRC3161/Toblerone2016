@@ -12,8 +12,8 @@ public class Intake extends RepeatingPooledSubsystem {
     private SpeedController intakeRoller;
 
     private double rollerTarget;
-    private IntakePivot.PivotPosition lastPivotTarget = IntakePivot.PivotPosition.RAISED;
-    private IntakePivot.PivotPosition pivotTarget = IntakePivot.PivotPosition.RAISED;
+    private IntakePivot.Position lastPivotTarget = IntakePivot.Position.RAISED;
+    private IntakePivot.Position pivotTarget = IntakePivot.Position.RAISED;
 
     public Intake(CANTalon talon, SpeedController intakeRoller) {
         super(50, TimeUnit.MILLISECONDS);
@@ -50,14 +50,14 @@ public class Intake extends RepeatingPooledSubsystem {
 
     public void raise() {
         pivot.enable();
-        setPivotTarget(IntakePivot.PivotPosition.RAISED);
+        setPivotTarget(IntakePivot.Position.RAISED);
     }
 
     public void lower() {
-        setPivotTarget(IntakePivot.PivotPosition.LOWERED);
+        setPivotTarget(IntakePivot.Position.LOWERED);
     }
 
-    public void setPivotTarget(IntakePivot.PivotPosition pivotTarget) {
+    public void setPivotTarget(IntakePivot.Position pivotTarget) {
         this.pivotTarget = pivotTarget;
     }
 
@@ -75,10 +75,10 @@ public class Intake extends RepeatingPooledSubsystem {
     public void task() throws Exception {
         if (lastPivotTarget != pivotTarget) {
             lastPivotTarget = pivotTarget;
-            pivot.setPivotPosition(pivotTarget);
+            pivot.setPosition(pivotTarget);
         }
-        if (pivotTarget.equals(IntakePivot.PivotPosition.LOWERED)
-                    && pivot.atTarget(IntakePivot.PivotPosition.LOWERED)) {
+        if (pivotTarget.equals(IntakePivot.Position.LOWERED)
+                    && pivot.atTarget(IntakePivot.Position.LOWERED)) {
             pivot.disable();
         }
         intakeRoller.set(rollerTarget);

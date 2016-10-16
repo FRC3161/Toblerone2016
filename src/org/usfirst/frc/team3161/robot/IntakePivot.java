@@ -5,14 +5,14 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
 public class IntakePivot extends PIDSubsystem {
 
-    public enum PivotPosition {
+    public enum Position {
         RAISED(7600),
         LOWERED(950),
         ;
 
         private double value;
 
-        PivotPosition(double value) {
+        Position(double value) {
             this.value = value;
         }
 
@@ -24,17 +24,17 @@ public class IntakePivot extends PIDSubsystem {
     private static final int TOLERANCE = 150;
 
     private CANTalon talon;
-    private IntakePivot.PivotPosition pivotPosition = IntakePivot.PivotPosition.RAISED;
+    private Position position = Position.RAISED;
 
     public IntakePivot(CANTalon talon) {
         super("IntakePivot", 0.0005d, 0.0d, 0.00075d);
         this.talon = talon;
         setAbsoluteTolerance(TOLERANCE);
         getPIDController().setContinuous(false);
-        setInputRange(PivotPosition.LOWERED.getValue(), PivotPosition.RAISED.getValue());
+        setInputRange(Position.LOWERED.getValue(), Position.RAISED.getValue());
         setOutputRange(-0.85, 0.85);
         talon.enableBrakeMode(false);
-        setSetpoint(pivotPosition.getValue());
+        setSetpoint(position.getValue());
     }
 
     @Override
@@ -51,7 +51,7 @@ public class IntakePivot extends PIDSubsystem {
         talon.pidWrite(output);
     }
 
-    public boolean atTarget(PivotPosition pos) {
+    public boolean atTarget(Position pos) {
         double position = returnPIDInput();
         double upper = pos.getValue() + TOLERANCE;
         double lower = pos.getValue() - TOLERANCE;
@@ -60,11 +60,11 @@ public class IntakePivot extends PIDSubsystem {
     }
 
     public boolean atTarget() {
-        return atTarget(pivotPosition);
+        return atTarget(position);
     }
 
-    public void setPivotPosition(IntakePivot.PivotPosition pivotPosition) {
-        setSetpoint(pivotPosition.getValue());
+    public void setPosition(Position position) {
+        setSetpoint(position.getValue());
     }
 
 }

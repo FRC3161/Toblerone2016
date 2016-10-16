@@ -104,7 +104,7 @@ public class Robot extends TitanBot {
     public void disabledSetup() {
         tankDrivetrain.stop();
         intake.stop();
-        intake.setPivotTarget(IntakePivot.PivotPosition.RAISED);
+        intake.setPivotTarget(IntakePivot.Position.RAISED);
 
         operatorPad.disableBindings();
         driverPad.disableBindings();
