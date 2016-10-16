@@ -21,9 +21,6 @@ public class Robot extends TitanBot {
 
     private static final JoystickMode JOYSTICK_MODE = new SquaredJoystickMode().compose(new DeadbandJoystickMode(0.05));
 
-    private LogitechDualAction driverPad, operatorPad;
-    private Intake intake;
-
     @Override
     public TankDrivetrain getDrivetrainBase() {
         return new TankDrivetrain.Builder()
@@ -34,13 +31,13 @@ public class Robot extends TitanBot {
 
     @Override
     public void robotSetup() {
-        driverPad = new LogitechDualAction(0, 50, TimeUnit.MILLISECONDS);
+        LogitechDualAction driverPad = new LogitechDualAction(0, 50, TimeUnit.MILLISECONDS);
         registerLifecycleComponent(driverPad);
 
-        operatorPad = new LogitechDualAction(1, 50, TimeUnit.MILLISECONDS);
+        LogitechDualAction operatorPad = new LogitechDualAction(1, 50, TimeUnit.MILLISECONDS);
         registerLifecycleComponent(operatorPad);
 
-        intake = new Intake();
+        Intake intake = new Intake();
         registerLifecycleComponent(intake);
 
         driverPad.setMode(JOYSTICK_MODE);
@@ -65,27 +62,21 @@ public class Robot extends TitanBot {
     }
 
     @Override
-    public void autonomousSetup() {
-    }
+    public void autonomousSetup() {}
 
     @Override
-    public void autonomousRoutine() {
-    }
+    public void autonomousRoutine() {}
 
     @Override
-    public void teleopSetup() {
-    }
+    public void teleopSetup() {}
 
     @Override
-    public void teleopRoutine() {
-    }
+    public void teleopRoutine() {}
 
     @Override
-    public void disabledSetup() {
-    }
+    public void disabledSetup() {}
 
     @Override
-    public void disabledPeriodic() {
-    }
+    public void disabledPeriodic() {}
 
 }
