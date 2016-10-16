@@ -6,7 +6,6 @@ import static org.usfirst.frc.team3161.robot.RobotMap.frontLeftDrivetrainMotor;
 import static org.usfirst.frc.team3161.robot.RobotMap.frontRightDrivetrainMotor;
 
 import ca.team3161.lib.robot.TitanBot;
-import ca.team3161.lib.robot.motion.drivetrains.SpeedControllerGroup;
 import ca.team3161.lib.robot.motion.drivetrains.TankDrivetrain;
 import ca.team3161.lib.utils.controls.DeadbandJoystickMode;
 import ca.team3161.lib.utils.controls.Gamepad;
@@ -36,8 +35,8 @@ public class Robot extends TitanBot {
         operatorPad = new LogitechDualAction(1, 50, TimeUnit.MILLISECONDS);
 
         tankDrivetrain = new TankDrivetrain.Builder()
-                                 .leftControllers(new SpeedControllerGroup(frontLeftDrivetrainMotor, backLeftDrivetrainMotor))
-                                 .rightControllers(new SpeedControllerGroup(frontRightDrivetrainMotor, backRightDrivetrainMotor))
+                                 .leftControllers(frontLeftDrivetrainMotor, backLeftDrivetrainMotor)
+                                 .rightControllers(frontRightDrivetrainMotor, backRightDrivetrainMotor)
                                  .build();
 
         intake = new Intake();
