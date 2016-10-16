@@ -8,7 +8,6 @@ import static org.usfirst.frc.team3161.robot.RobotMap.frontRightDrivetrainMotor;
 import ca.team3161.lib.robot.TitanBot;
 import ca.team3161.lib.robot.motion.drivetrains.TankDrivetrain;
 import ca.team3161.lib.utils.controls.DeadbandJoystickMode;
-import ca.team3161.lib.utils.controls.Gamepad;
 import ca.team3161.lib.utils.controls.Gamepad.PressType;
 import ca.team3161.lib.utils.controls.JoystickMode;
 import ca.team3161.lib.utils.controls.LogitechDualAction;
@@ -22,7 +21,7 @@ public class Robot extends TitanBot {
 
     private static final JoystickMode JOYSTICK_MODE = new SquaredJoystickMode().compose(new DeadbandJoystickMode(0.05));
 
-    private Gamepad driverPad, operatorPad;
+    private LogitechDualAction driverPad, operatorPad;
     private Intake intake;
 
     @Override
@@ -36,13 +35,14 @@ public class Robot extends TitanBot {
     @Override
     public void robotSetup() {
         driverPad = new LogitechDualAction(0, 50, TimeUnit.MILLISECONDS);
-        driverPad.setMode(LogitechControl.LEFT_STICK, LogitechAxis.Y, JOYSTICK_MODE);
-        driverPad.setMode(LogitechControl.RIGHT_STICK, LogitechAxis.Y, JOYSTICK_MODE);
+        registerLifecycleComponent(driverPad);
 
         operatorPad = new LogitechDualAction(1, 50, TimeUnit.MILLISECONDS);
+        registerLifecycleComponent(operatorPad);
 
         intake = new Intake();
 
+        driverPad.setMode(JOYSTICK_MODE);
         driverPad.map(LogitechControl.LEFT_STICK, LogitechAxis.Y, getDrivetrainBase()::setLeftTarget);
         driverPad.map(LogitechControl.RIGHT_STICK, LogitechAxis.Y, getDrivetrainBase()::setRightTarget);
 
@@ -66,9 +66,6 @@ public class Robot extends TitanBot {
     @Override
     public void autonomousSetup() {
         intake.stop();
-
-        operatorPad.disableBindings();
-        driverPad.disableBindings();
     }
 
     @Override
@@ -78,9 +75,6 @@ public class Robot extends TitanBot {
     @Override
     public void teleopSetup() {
         intake.start();
-
-        operatorPad.enableBindings();
-        driverPad.enableBindings();
     }
 
     @Override
@@ -91,9 +85,6 @@ public class Robot extends TitanBot {
     public void disabledSetup() {
         intake.stop();
         intake.setPivotTarget(IntakePivot.Position.RAISED);
-
-        operatorPad.disableBindings();
-        driverPad.disableBindings();
     }
 
     @Override
