@@ -41,6 +41,7 @@ public class Robot extends TitanBot {
         registerLifecycleComponent(operatorPad);
 
         intake = new Intake();
+        registerLifecycleComponent(intake);
 
         driverPad.setMode(JOYSTICK_MODE);
         driverPad.map(LogitechControl.LEFT_STICK, LogitechAxis.Y, getDrivetrainBase()::setLeftTarget);
@@ -65,7 +66,6 @@ public class Robot extends TitanBot {
 
     @Override
     public void autonomousSetup() {
-        intake.stop();
     }
 
     @Override
@@ -74,7 +74,6 @@ public class Robot extends TitanBot {
 
     @Override
     public void teleopSetup() {
-        intake.start();
     }
 
     @Override
@@ -83,8 +82,6 @@ public class Robot extends TitanBot {
 
     @Override
     public void disabledSetup() {
-        intake.stop();
-        intake.setPivotTarget(IntakePivot.Position.RAISED);
     }
 
     @Override

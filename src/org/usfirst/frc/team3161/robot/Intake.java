@@ -3,10 +3,12 @@ package org.usfirst.frc.team3161.robot;
 import static org.usfirst.frc.team3161.robot.RobotMap.intakePivot;
 import static org.usfirst.frc.team3161.robot.RobotMap.intakeRoller;
 
+import ca.team3161.lib.robot.LifecycleEvent;
+import ca.team3161.lib.robot.LifecycleListener;
 import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
 import java.util.concurrent.TimeUnit;
 
-public class Intake extends RepeatingPooledSubsystem {
+public class Intake extends RepeatingPooledSubsystem implements LifecycleListener {
 
     private IntakePivot pivot;
 
@@ -81,4 +83,20 @@ public class Intake extends RepeatingPooledSubsystem {
         intakeRoller.set(rollerTarget);
     }
 
+    @Override
+    public void lifecycleStatusChanged(final LifecycleEvent previous, final LifecycleEvent current) {
+        switch (current) {
+            case ON_AUTO:
+            case ON_TELEOP:
+            case ON_TEST:
+                start();
+                break;
+            case ON_DISABLED:
+                setPivotTarget(IntakePivot.Position.RAISED);
+            case NONE:
+            case ON_INIT:
+                stop();
+                break;
+        }
+    }
 }
