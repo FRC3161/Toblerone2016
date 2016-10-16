@@ -22,14 +22,6 @@ public class Robot extends TitanBot {
     private static final JoystickMode JOYSTICK_MODE = new SquaredJoystickMode().compose(new DeadbandJoystickMode(0.05));
 
     @Override
-    public TankDrivetrain getDrivetrainBase() {
-        return new TankDrivetrain.Builder()
-                .leftControllers(frontLeftDrivetrainMotor, backLeftDrivetrainMotor)
-                .rightControllers(frontRightDrivetrainMotor, backRightDrivetrainMotor)
-                .build();
-    }
-
-    @Override
     public void robotSetup() {
         LogitechDualAction driverPad = new LogitechDualAction(0, 50, TimeUnit.MILLISECONDS);
         registerLifecycleComponent(driverPad);
@@ -37,12 +29,18 @@ public class Robot extends TitanBot {
         LogitechDualAction operatorPad = new LogitechDualAction(1, 50, TimeUnit.MILLISECONDS);
         registerLifecycleComponent(operatorPad);
 
+        TankDrivetrain drivetrain = new TankDrivetrain.Builder()
+                       .leftControllers(frontLeftDrivetrainMotor, backLeftDrivetrainMotor)
+                       .rightControllers(frontRightDrivetrainMotor, backRightDrivetrainMotor)
+                       .build();
+        registerLifecycleComponent(drivetrain);
+
         Intake intake = new Intake();
         registerLifecycleComponent(intake);
 
         driverPad.setMode(JOYSTICK_MODE);
-        driverPad.map(LogitechControl.LEFT_STICK, LogitechAxis.Y, getDrivetrainBase()::setLeftTarget);
-        driverPad.map(LogitechControl.RIGHT_STICK, LogitechAxis.Y, getDrivetrainBase()::setRightTarget);
+        driverPad.map(LogitechControl.LEFT_STICK, LogitechAxis.Y, drivetrain::setLeftTarget);
+        driverPad.map(LogitechControl.RIGHT_STICK, LogitechAxis.Y, drivetrain::setRightTarget);
 
         operatorPad.bind(LogitechButton.A, intake::lower);
         operatorPad.bind(LogitechButton.B, intake::raise);
