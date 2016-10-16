@@ -30,11 +30,11 @@ public class Robot extends TitanBot {
 
     @Override
     public void robotSetup() {
-        driverPad = new LogitechDualAction(0, 20, TimeUnit.MILLISECONDS);
+        driverPad = new LogitechDualAction(0, 50, TimeUnit.MILLISECONDS);
         driverPad.setMode(LogitechControl.LEFT_STICK, LogitechAxis.Y, JOYSTICK_MODE);
         driverPad.setMode(LogitechControl.RIGHT_STICK, LogitechAxis.Y, JOYSTICK_MODE);
 
-        operatorPad = new LogitechDualAction(1, 20, TimeUnit.MILLISECONDS);
+        operatorPad = new LogitechDualAction(1, 50, TimeUnit.MILLISECONDS);
 
         frontLeftMotor = new Talon(2);
         backLeftMotor = new Talon(3);
