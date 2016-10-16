@@ -3,6 +3,7 @@ package org.usfirst.frc.team3161.robot;
 import ca.team3161.lib.robot.TitanBot;
 import ca.team3161.lib.robot.motion.drivetrains.SpeedControllerGroup;
 import ca.team3161.lib.robot.motion.drivetrains.TankDrivetrain;
+import ca.team3161.lib.utils.controls.DeadbandJoystickMode;
 import ca.team3161.lib.utils.controls.Gamepad;
 import ca.team3161.lib.utils.controls.Gamepad.PressType;
 import ca.team3161.lib.utils.controls.JoystickMode;
@@ -18,6 +19,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Robot extends TitanBot {
 
+    private static final JoystickMode JOYSTICK_MODE = new SquaredJoystickMode().compose(new DeadbandJoystickMode(0.05));
+
     private SpeedController intakeRoller,
             frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor;
     private CANTalon intakePivot;
@@ -28,8 +31,8 @@ public class Robot extends TitanBot {
     @Override
     public void robotSetup() {
         driverPad = new LogitechDualAction(0, 20, TimeUnit.MILLISECONDS);
-        driverPad.setMode(LogitechControl.LEFT_STICK, LogitechAxis.Y, new EpimetheusJoystickMode(0.05));
-        driverPad.setMode(LogitechControl.RIGHT_STICK, LogitechAxis.Y, new EpimetheusJoystickMode(0.05));
+        driverPad.setMode(LogitechControl.LEFT_STICK, LogitechAxis.Y, JOYSTICK_MODE);
+        driverPad.setMode(LogitechControl.RIGHT_STICK, LogitechAxis.Y, JOYSTICK_MODE);
 
         operatorPad = new LogitechDualAction(1, 20, TimeUnit.MILLISECONDS);
 
@@ -109,24 +112,6 @@ public class Robot extends TitanBot {
 
     @Override
     public void disabledPeriodic() {
-    }
-
-    class EpimetheusJoystickMode implements JoystickMode {
-
-        private final JoystickMode squared = new SquaredJoystickMode();
-        private final double deadband;
-
-        public EpimetheusJoystickMode(double deadband) {
-            this.deadband = deadband;
-        }
-
-        @Override
-        public double adjust(double in) {
-            if (in < deadband && in > -deadband) {
-                return 0;
-            }
-            return squared.adjust(in);
-        }
     }
 
 }
