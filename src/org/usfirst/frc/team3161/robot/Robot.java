@@ -1,5 +1,10 @@
 package org.usfirst.frc.team3161.robot;
 
+import static org.usfirst.frc.team3161.robot.RobotMap.backLeftDrivetrainMotor;
+import static org.usfirst.frc.team3161.robot.RobotMap.backRightDrivetrainMotor;
+import static org.usfirst.frc.team3161.robot.RobotMap.frontLeftDrivetrainMotor;
+import static org.usfirst.frc.team3161.robot.RobotMap.frontRightDrivetrainMotor;
+
 import ca.team3161.lib.robot.TitanBot;
 import ca.team3161.lib.robot.motion.drivetrains.SpeedControllerGroup;
 import ca.team3161.lib.robot.motion.drivetrains.TankDrivetrain;
@@ -12,18 +17,12 @@ import ca.team3161.lib.utils.controls.LogitechDualAction.LogitechAxis;
 import ca.team3161.lib.utils.controls.LogitechDualAction.LogitechButton;
 import ca.team3161.lib.utils.controls.LogitechDualAction.LogitechControl;
 import ca.team3161.lib.utils.controls.SquaredJoystickMode;
-import edu.wpi.first.wpilibj.CANTalon;
-import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Talon;
 import java.util.concurrent.TimeUnit;
 
 public class Robot extends TitanBot {
 
     private static final JoystickMode JOYSTICK_MODE = new SquaredJoystickMode().compose(new DeadbandJoystickMode(0.05));
 
-    private SpeedController intakeRoller,
-            frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor;
-    private CANTalon intakePivot;
     private Gamepad driverPad, operatorPad;
     private TankDrivetrain tankDrivetrain;
     private Intake intake;
@@ -36,23 +35,12 @@ public class Robot extends TitanBot {
 
         operatorPad = new LogitechDualAction(1, 50, TimeUnit.MILLISECONDS);
 
-        frontLeftMotor = new Talon(2);
-        backLeftMotor = new Talon(3);
-        frontRightMotor = new Talon(0);
-        backRightMotor = new Talon(1);
-
-        SpeedControllerGroup leftControllers = new SpeedControllerGroup(frontLeftMotor, backLeftMotor);
-        leftControllers.setInverted(true);
-        SpeedControllerGroup rightControllers = new SpeedControllerGroup(frontRightMotor, backRightMotor);
-        rightControllers.setInverted(true);
         tankDrivetrain = new TankDrivetrain.Builder()
-                                 .leftControllers(leftControllers)
-                                 .rightControllers(rightControllers)
+                                 .leftControllers(new SpeedControllerGroup(frontLeftDrivetrainMotor, backLeftDrivetrainMotor))
+                                 .rightControllers(new SpeedControllerGroup(frontRightDrivetrainMotor, backRightDrivetrainMotor))
                                  .build();
 
-        intakePivot = new CANTalon(0);
-        intakeRoller = new Talon(5);
-        intake = new Intake(intakePivot, intakeRoller);
+        intake = new Intake();
 
         driverPad.map(LogitechControl.LEFT_STICK, LogitechAxis.Y, tankDrivetrain::setLeftTarget);
         driverPad.map(LogitechControl.RIGHT_STICK, LogitechAxis.Y, tankDrivetrain::setRightTarget);

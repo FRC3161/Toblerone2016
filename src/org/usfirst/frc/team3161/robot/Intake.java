@@ -1,30 +1,27 @@
 package org.usfirst.frc.team3161.robot;
 
+import static org.usfirst.frc.team3161.robot.RobotMap.intakePivot;
+import static org.usfirst.frc.team3161.robot.RobotMap.intakeRoller;
+
 import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
-import edu.wpi.first.wpilibj.CANTalon;
-import edu.wpi.first.wpilibj.SpeedController;
 import java.util.concurrent.TimeUnit;
 
 public class Intake extends RepeatingPooledSubsystem {
 
-    private CANTalon talon;
     private IntakePivot pivot;
-    private SpeedController intakeRoller;
 
     private double rollerTarget;
     private IntakePivot.Position lastPivotTarget = IntakePivot.Position.RAISED;
     private IntakePivot.Position pivotTarget = IntakePivot.Position.RAISED;
 
-    public Intake(CANTalon talon, SpeedController intakeRoller) {
+    public Intake() {
         super(50, TimeUnit.MILLISECONDS);
-        this.talon = talon;
-        this.pivot = new IntakePivot(talon);
-        this.intakeRoller = intakeRoller;
+        this.pivot = new IntakePivot();
     }
 
     @Override
     public void defineResources() {
-        require(talon);
+        require(intakePivot);
         require(intakeRoller);
     }
 

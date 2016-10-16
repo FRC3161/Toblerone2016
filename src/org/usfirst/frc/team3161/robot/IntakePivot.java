@@ -1,5 +1,7 @@
 package org.usfirst.frc.team3161.robot;
 
+import static org.usfirst.frc.team3161.robot.RobotMap.intakePivot;
+
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
@@ -9,21 +11,18 @@ public class IntakePivot extends PIDSubsystem {
     public static final double KI = 0.0d;
     public static final double KD = 0.00075d;
 
-    private static final int TOLERANCE = 150;
+    public static final int TOLERANCE = 150;
     public static final double MINIMUM_MOTOR_OUTPUT = -0.85;
     public static final double MAXIMUM_MOTOR_OUTPUT = 0.85;
 
-    private CANTalon talon;
+    private volatile Position position = Position.RAISED;
 
-    private Position position = Position.RAISED;
-    public IntakePivot(CANTalon talon) {
+    public IntakePivot() {
         super("IntakePivot", KP, KI, KD);
-        this.talon = talon;
         setAbsoluteTolerance(TOLERANCE);
         getPIDController().setContinuous(false);
         setInputRange(Position.LOWERED.getValue(), Position.RAISED.getValue());
         setOutputRange(MINIMUM_MOTOR_OUTPUT, MAXIMUM_MOTOR_OUTPUT);
-        talon.enableBrakeMode(false);
         setSetpoint(position.getValue());
     }
 
@@ -33,12 +32,12 @@ public class IntakePivot extends PIDSubsystem {
 
     @Override
     protected double returnPIDInput() {
-        return talon.getEncPosition();
+        return intakePivot.getEncPosition();
     }
 
     @Override
     protected void usePIDOutput(double output) {
-        talon.pidWrite(output);
+        intakePivot.pidWrite(output);
     }
 
     public boolean atTarget(Position pos) {
