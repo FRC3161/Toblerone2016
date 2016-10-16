@@ -51,9 +51,6 @@ public class Robot extends TitanBot {
         operatorPad.bind(LogitechButton.LEFT_BUMPER, PressType.RELEASE, intake::stopRoller);
         operatorPad.bind(LogitechButton.RIGHT_BUMPER, PressType.PRESS, intake::rollOut);
         operatorPad.bind(LogitechButton.RIGHT_BUMPER, PressType.RELEASE, intake::stopRoller);
-
-        driverPad.disableBindings();
-        operatorPad.disableBindings();
     }
 
     @Override
