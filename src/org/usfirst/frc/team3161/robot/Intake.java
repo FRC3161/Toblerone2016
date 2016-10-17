@@ -12,7 +12,7 @@ public class Intake extends RepeatingPooledSubsystem implements LifecycleListene
 
     private IntakePivot pivot;
 
-    private double rollerTarget;
+    private RollerState rollerState = RollerState.STOPPED;
     private IntakePivot.Position lastPivotTarget = IntakePivot.Position.RAISED;
     private IntakePivot.Position pivotTarget = IntakePivot.Position.RAISED;
 
@@ -28,23 +28,15 @@ public class Intake extends RepeatingPooledSubsystem implements LifecycleListene
     }
 
     public void rollIn() {
-        setRoller(1);
+        this.rollerState = RollerState.IN;
     }
 
     public void rollOut() {
-        setRoller(-1);
+        this.rollerState = RollerState.OUT;
     }
 
     public void stopRoller() {
-        setRoller(0);
-    }
-
-    private void setRoller(double val) {
-        if (val > 0) {
-            this.rollerTarget = val / 2;
-        } else {
-            this.rollerTarget = val;
-        }
+        this.rollerState = RollerState.STOPPED;
     }
 
     public void raise() {
@@ -80,7 +72,7 @@ public class Intake extends RepeatingPooledSubsystem implements LifecycleListene
                     && pivot.atTarget(IntakePivot.Position.LOWERED)) {
             pivot.disable();
         }
-        intakeRoller.set(rollerTarget);
+        intakeRoller.set(rollerState.getPwm());
     }
 
     @Override
@@ -97,6 +89,23 @@ public class Intake extends RepeatingPooledSubsystem implements LifecycleListene
             case ON_INIT:
                 stop();
                 break;
+        }
+    }
+
+    private enum RollerState {
+        IN(0.5d),
+        OUT(-1.0d),
+        STOPPED(0.0d),
+        ;
+
+        private double pwm;
+
+        RollerState(double pwm) {
+            this.pwm = pwm;
+        }
+
+        public double getPwm() {
+            return pwm;
         }
     }
 }
