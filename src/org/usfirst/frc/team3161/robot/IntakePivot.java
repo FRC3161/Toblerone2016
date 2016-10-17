@@ -53,6 +53,7 @@ public class IntakePivot extends PIDSubsystem {
     }
 
     public void setPosition(Position position) {
+        this.position = position;
         setSetpoint(position.getValue());
     }
 
