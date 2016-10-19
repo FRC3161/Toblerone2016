@@ -5,8 +5,11 @@ import static org.usfirst.frc.team3161.robot.RobotMap.backRightDrivetrainMotor;
 import static org.usfirst.frc.team3161.robot.RobotMap.frontLeftDrivetrainMotor;
 import static org.usfirst.frc.team3161.robot.RobotMap.frontRightDrivetrainMotor;
 
+import java.util.concurrent.TimeUnit;
+
 import ca.team3161.lib.robot.TitanBot;
 import ca.team3161.lib.robot.motion.drivetrains.TankDrivetrain;
+import ca.team3161.lib.utils.controls.CubedJoystickMode;
 import ca.team3161.lib.utils.controls.DeadbandJoystickMode;
 import ca.team3161.lib.utils.controls.Gamepad.PressType;
 import ca.team3161.lib.utils.controls.JoystickMode;
@@ -14,12 +17,10 @@ import ca.team3161.lib.utils.controls.LogitechDualAction;
 import ca.team3161.lib.utils.controls.LogitechDualAction.LogitechAxis;
 import ca.team3161.lib.utils.controls.LogitechDualAction.LogitechButton;
 import ca.team3161.lib.utils.controls.LogitechDualAction.LogitechControl;
-import ca.team3161.lib.utils.controls.SquaredJoystickMode;
-import java.util.concurrent.TimeUnit;
 
 public class Robot extends TitanBot {
 
-    private static final JoystickMode JOYSTICK_MODE = new SquaredJoystickMode().compose(new DeadbandJoystickMode(0.05));
+    private static final JoystickMode JOYSTICK_MODE = new CubedJoystickMode().compose(new DeadbandJoystickMode(0.02));
 
     @Override
     public void robotSetup() {
@@ -42,8 +43,9 @@ public class Robot extends TitanBot {
         driverPad.map(LogitechControl.LEFT_STICK, LogitechAxis.Y, drivetrain::setLeftTarget);
         driverPad.map(LogitechControl.RIGHT_STICK, LogitechAxis.Y, drivetrain::setRightTarget);
 
-        operatorPad.bind(LogitechButton.A, intake::lower);
-        operatorPad.bind(LogitechButton.B, intake::raise);
+        operatorPad.bind(LogitechButton.A, intake::intake);
+        operatorPad.bind(LogitechButton.B, intake::carry);
+        operatorPad.bind(LogitechButton.Y, intake::breach);
 
         operatorPad.bind(LogitechButton.LEFT_BUMPER, PressType.PRESS, intake::rollIn);
         operatorPad.bind(LogitechButton.LEFT_BUMPER, PressType.RELEASE, intake::stopRoller);
@@ -72,6 +74,12 @@ public class Robot extends TitanBot {
     public void disabledSetup() {}
 
     @Override
-    public void disabledPeriodic() {}
+    public void disabledRoutine() {}
+    
+    @Override
+    public void testSetup() {}
+    
+    @Override
+    public void testRoutine() {}
 
 }

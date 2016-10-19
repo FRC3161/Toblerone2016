@@ -3,18 +3,19 @@ package org.usfirst.frc.team3161.robot;
 import static org.usfirst.frc.team3161.robot.RobotMap.intakePivot;
 import static org.usfirst.frc.team3161.robot.RobotMap.intakeRoller;
 
+import java.util.concurrent.TimeUnit;
+
 import ca.team3161.lib.robot.LifecycleEvent;
 import ca.team3161.lib.robot.LifecycleListener;
 import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
-import java.util.concurrent.TimeUnit;
 
 public class Intake extends RepeatingPooledSubsystem implements LifecycleListener {
 
     private IntakePivot pivot;
 
     private RollerState rollerState = RollerState.STOPPED;
-    private IntakePivot.Position lastPivotTarget = IntakePivot.Position.RAISED;
-    private IntakePivot.Position pivotTarget = IntakePivot.Position.RAISED;
+    private IntakePivot.Position lastPivotTarget = IntakePivot.Position.CARRYING;
+    private IntakePivot.Position pivotTarget = IntakePivot.Position.CARRYING;
 
     public Intake() {
         super(50, TimeUnit.MILLISECONDS);
@@ -39,13 +40,19 @@ public class Intake extends RepeatingPooledSubsystem implements LifecycleListene
         this.rollerState = RollerState.STOPPED;
     }
 
-    public void raise() {
-        pivot.enable();
-        setPivotTarget(IntakePivot.Position.RAISED);
+    public void intake() {
+       
+        setPivotTarget(IntakePivot.Position.INTAKE);
     }
 
-    public void lower() {
-        setPivotTarget(IntakePivot.Position.LOWERED);
+    public void carry() {
+    	pivot.enable();
+        setPivotTarget(IntakePivot.Position.CARRYING);
+    }
+    
+    public void breach() {
+    	pivot.enable();
+    	setPivotTarget(IntakePivot.Position.BREACHING);
     }
 
     public void setPivotTarget(IntakePivot.Position pivotTarget) {
@@ -68,8 +75,8 @@ public class Intake extends RepeatingPooledSubsystem implements LifecycleListene
             lastPivotTarget = pivotTarget;
             pivot.setPosition(pivotTarget);
         }
-        if (pivotTarget.equals(IntakePivot.Position.LOWERED)
-                    && pivot.atTarget(IntakePivot.Position.LOWERED)) {
+        if (pivotTarget.equals(IntakePivot.Position.INTAKE)
+                    && pivot.atTarget(IntakePivot.Position.INTAKE)) {
             pivot.disable();
         }
         intakeRoller.set(rollerState.getPwm());
@@ -84,7 +91,7 @@ public class Intake extends RepeatingPooledSubsystem implements LifecycleListene
                 start();
                 break;
             case ON_DISABLED:
-                setPivotTarget(IntakePivot.Position.RAISED);
+                setPivotTarget(IntakePivot.Position.CARRYING);
             case NONE:
             case ON_INIT:
                 stop();
